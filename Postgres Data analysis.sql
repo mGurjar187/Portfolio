@@ -73,3 +73,30 @@ SELECT
 	PERCENTILE_DISC(0.5) WITHIN GROUP (ORDER BY distance_in_miles)
 FROM closest_dealerships;
 
+-- Exercise #24 JSONB
+-- 1. Getting each sales item using JSON_ARRAY_ELEMENTS function
+
+CREATE TEMP TABLE customer_sales_single_sale_json AS(
+	SELECT 
+		customer_json,
+		JSONB_ARRAY_ELEMENTS(customer_json -> 'sales') AS sales_json 
+	FROM customer_sales 
+);
+
+-- 2. Filtering the output with product name Blade. 
+
+SELECT 
+	DISTINCT customer_json  
+	FROM customer_sales_single_sale_json
+	WHERE sales_json ->> 'product_name' =  'Blade';
+
+-- 3. Using JSONB_PRETTY() to format the output.
+
+SELECT 
+	DISTINCT JSONB_PRETTY(customer_json)  
+	FROM customer_sales_single_sale_json
+	WHERE sales_json ->> 'product_name' =  'Blade';
+	
+
+
+
