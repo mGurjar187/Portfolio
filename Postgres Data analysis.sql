@@ -97,6 +97,43 @@ SELECT
 	FROM customer_sales_single_sale_json
 	WHERE sales_json ->> 'product_name' =  'Blade';
 	
+-- Exercise #25 Text Analytics
 
+-- 1. Customer survey table 
 
+SELECT * FROM customer_survey;
+
+-- 2. Parsing the feedback into individual words with their associated ratings
+
+SELECT 
+	UNNEST(STRING_TO_ARRAY(feedback,' ')) AS word,
+	rating
+FROM customer_survey;
+
+-- 3. Standardize the text using ts_lexize() with stemmer 'english_stem' and REGEXP_REPLACE()
+
+SELECT 
+	(ts_lexize('english_stem'
+				,UNNEST(STRING_TO_ARRAY(
+					REGEXP_REPLACE(feedback,'[^a-zA-Z]+',' ', 'g'),
+					' '))))[1] AS token,
+	rating
+FROM customer_survey;
+
+-- 4. Calculate average rating for each token using GROUP_BY clause.
+
+SELECT 
+	(ts_lexize('english_stem'
+				,UNNEST(STRING_TO_ARRAY(
+					REGEXP_REPLACE(feedback,'[^a-zA-Z]+',' ', 'g'),
+					' '))))[1] AS token,
+	AVG(rating)
+FROM customer_survey
+GROUP BY 1
+HAVING COUNT(1) >=3
+ORDER BY 2;
+
+-- 5. Verify survey resoponses that contains these tokens.
+
+SELECT * FROM customer_survey WHERE feedback ILIKE '%pop%';
 
