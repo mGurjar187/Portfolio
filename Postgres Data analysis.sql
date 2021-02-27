@@ -137,3 +137,45 @@ ORDER BY 2;
 
 SELECT * FROM customer_survey WHERE feedback ILIKE '%pop%';
 
+-- Activity 9 Sales Search and Analysis
+
+-- 1. Creating a searchable materialized view on customer sales table.
+
+CREATE MATERIALIZED VIEW customer_sales_search AS (
+	SELECT 
+		customer_json -> 'customer_id' AS customer_id,
+		customer_json,
+		to_tsvector('english', customer_json) AS searchable
+	FROM customer_sales
+);
+
+-- 2. Creating Generalized Inverted Index(GIN) on view.
+
+CREATE INDEX idx_customer_sales_search_searchable ON customer_sales_search USING GIN(searchable);
+
+-- 3. Finding the customer with name of Danny who purchased Bat Scooter.
+
+SELECT 
+	customer_id,
+	JSONB_PRETTY(customer_json)
+FROM customer_sales_search 
+WHERE searchable @@ plainto_tsquery('english','Danny Bat');
+
+-- 4. Finding the number of times scooter and automobile is purchased together.
+
+SELECT 
+	sub.query,
+	(SELECT 
+		COUNT(1)
+	FROM customer_sales_search
+	WHERE customer_sales_search.searchable @@ sub.query) 
+FROM (SELECT DISTINCT
+		plainto_tsquery('english',p1.model) &&
+		plainto_tsquery('english',p2.model) AS query
+	FROM products p1
+	CROSS JOIN products p2
+	where p1.product_type = 'scooter'
+	AND p2.product_type = 'automobile'
+	AND p1.model NOT LIKE '%Limited Edition%'
+	) sub
+ORDER BY 2 DESC;
