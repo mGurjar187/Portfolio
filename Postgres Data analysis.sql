@@ -177,5 +177,65 @@ FROM (SELECT DISTINCT
 	where p1.product_type = 'scooter'
 	AND p2.product_type = 'automobile'
 	AND p1.model NOT LIKE '%Limited Edition%'
-	) sub
+	) 
 ORDER BY 2 DESC;
+
+-- Activity 13 Impementing Joins
+
+-- 1. Find customers to whome emails has been sent.
+
+SELECT 
+	c.customer_id,
+	c.first_name,
+	c.last_name,
+	e.email_subject,
+	e.opened,
+	e.clicked
+FROM customers c 
+INNER JOIN emails e
+ON c.customer_id = e.customer_id;
+
+-- 2. Save the above query in customer_emails table.
+
+SELECT 
+	c.customer_id,
+	c.first_name,
+	c.last_name,
+	e.email_subject,
+	e.opened,
+	e.clicked
+INTO customer_emails
+FROM customers c 
+INNER JOIN emails e
+ON c.customer_id = e.customer_id;
+
+-- 3. Find customers who opened or clicked the email sent.
+
+SELECT * FROM customer_emails WHERE clicked = 't' AND opened = 't';
+
+-- 4. Find the customers who dealership in their city.
+
+SELECT 
+	c.customer_id,
+	c.first_name,
+	c.last_name,
+	c.city
+FROM customers c
+LEFT JOIN dealerships d
+ON c.city = d.city;
+
+-- 5. Save the above query to table customer_dealers.
+
+SELECT 
+	c.customer_id,
+	c.first_name,
+	c.last_name,
+	c.city
+INTO customer_dealers
+FROM customers c
+LEFT JOIN dealerships d
+ON c.city = d.city;
+
+-- 6. List the customers who do not have dealershi in their city.
+
+SELECT * FROM customer_dealers WHERE city IS NULL;
