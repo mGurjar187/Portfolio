@@ -239,3 +239,45 @@ ON c.city = d.city;
 -- 6. List the customers who do not have dealershi in their city.
 
 SELECT * FROM customer_dealers WHERE city IS NULL;
+
+-- Activity 16 Averages Purchases Trigger
+
+-- 1. Create avg qty log table.
+
+CREATE TABLE avg_qty_log (
+	order_id integer,
+	avg_qty numeric
+);
+
+-- 2. Create function avg_qty that calculates average of quantity, updates avg_qty_log table and returns a trigger.
+
+DROP FUNCTION IF EXISTS avg_qty();
+
+CREATE FUNCTION avg_qty() RETURNS TRIGGER AS $avg_trigger$
+DECLARE avg_qty numeric;
+BEGIN
+	SELECT AVG(qty) INTO avg_qty FROM order_info;
+	INSERT INTO avg_qty_log (order_id, avg_qty) VALUES (NEW.order_id, avg_qty);
+RETURN NEW;
+END; $avg_trigger$
+LANGUAGE PLPGSQL;
+
+-- 3. Creating avg_trigger trigger after insert on order_info table.
+
+DROP TRIGGER IF EXISTS avg_trigger ON order_info;
+
+CREATE TRIGGER avg_trigger
+AFTER INSERT ON order_info
+FOR EACH ROW
+EXECUTE PROCEDURE avg_qty();
+
+-- 4. Inserting rows into order info table using insert_order()
+
+SELECT insert_order(3, 'GROG1', 6);
+SELECT insert_order(4, 'GROG1', 7);
+SELECT insert_order(1, 'GROG1', 8);
+
+-- 5. Verifying the result in avg_qty_log table 
+
+SELECT * FROM avg_qty_log;
+
