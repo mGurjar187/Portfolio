@@ -84,3 +84,33 @@ SELECT * FROM bat_sales_daily LIMIT 22;
 
 -- Activity 18 Quantify the sales drop
 
+-- 1. Compute daily commulative sales and put into bat_sales_growth
+
+SELECT
+	*, SUM(count) OVER (ORDER BY sales_transaction_date)
+INTO bat_sales_growth
+FROM bat_sales_daily;
+
+-- 2. Find 7 day delay of the sum column and insert into new delay table.
+
+SELECT 
+	*, LAG(sum, 7) OVER (ORDER BY sales_transaction_date)
+INTO bat_sales_daily_delay
+FROM bat_sales_growth;
+
+-- 3. Inspect the first 15 rows of the new table
+
+SELECT * FROM bat_sales_daily_delay LIMIT 15;
+
+-- 4. Compute sales growth as a percentage from current sales and sales 1 week prior
+
+SELECT 
+	*, (sum-lag)/lag AS volume
+INTO bat_sales_delay_vol 
+FROM bat_sales_daily_delay;
+
+-- 5. Inspect first 3 weeks from new created table
+
+SELECT * FROM bat_sales_delay_vol LIMIT 22;
+
+-- Activity 19 Analyzing the Difference in Sales Price Hypothesis
