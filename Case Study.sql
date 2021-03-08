@@ -113,4 +113,92 @@ FROM bat_sales_daily_delay;
 
 SELECT * FROM bat_sales_delay_vol LIMIT 22;
 
--- Activity 19 Analyzing the Difference in Sales Price Hypothesis
+-- Exericse 36 Launch Time Analysis
+
+-- 1. Examine products table
+
+SELECT * FROM products;
+
+-- 2. List only scooters from the products table
+
+SELECT * FROM products WHERE product_type = 'scooter'; 
+
+-- 3. List first 5 customers from sales table
+
+SELECT * FROM sales LIMIT 5;
+
+-- 4. Extract model and sales transaction date for Bat Limited Edition
+
+SELECT 
+	model,
+	sales_transaction_date
+INTO bat_ltd_sales
+FROM products p
+JOIN sales s 
+ON p.product_id = s.product_id
+WHERE model = 'Bat Limited Edition'
+ORDER BY 2;
+
+-- 5. Select first 5 lines of new table
+
+SELECT * FROM bat_ltd_sales LIMIT 5;
+
+-- 6. Check the total sales for Bat Limited Edition
+
+SELECT COUNT(model) FROM bat_ltd_sales;
+
+-- 7. Fetch the transaction detail of last scooter sold.
+
+SELECT MAX(sales_transaction_date) FROM bat_ltd_sales;
+
+-- 8. Adjust the above table to cast the timestamp column to date.
+
+ALTER TABLE bat_ltd_sales
+ALTER COLUMN sales_transaction_date TYPE DATE;
+
+-- 9. Again, Select first 5 lines of new table
+
+SELECT * FROM bat_ltd_sales LIMIT 5;
+
+-- 10. Count the sales on daily basis
+
+SELECT 
+	sales_transaction_date,
+	COUNT(sales_transaction_date)
+INTO bat_ltd_sales_count
+FROM bat_ltd_sales
+GROUP BY 1
+ORDER BY 1;
+
+-- 11. Compute cummulative sum of daily sales
+
+SELECT 
+	*, SUM(count) OVER (ORDER BY sales_transaction_date)
+INTO bat_ltd_sales_growth
+FROM bat_ltd_sales_count;
+
+-- 12. Select the first 22 days from the above table
+
+SELECT * FROM bat_ltd_sales_growth LIMIT 22;
+
+-- 13. Compare the sales records of original Bat Scooter
+
+SELECT * FROM bat_sales_growth LIMIT 22;
+
+-- 14. Compute the 7 day lag function for sum column
+
+SELECT *, LAG(sum, 7) OVER (ORDER BY sum)
+INTO bat_ltd_sales_delay
+FROM bat_ltd_sales_growth;
+
+-- 15. Compute the sales growth volume
+
+SELECT *, (sum-lag)/lag AS volume
+INTO bat_ltd_sales_vol
+FROM bat_ltd_sales_delay;
+
+-- 16. List first 22 records of the new table
+
+SELECT * FROM bat_ltd_sales_vol LIMIT 22;
+
+-- Activity 19 Analyze difference in Sales Price Hypothesis
