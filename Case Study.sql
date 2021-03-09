@@ -51,7 +51,10 @@ SELECT * FROM product_sales LIMIT 5;
 
 -- 3. Extract all the info for Bat scooter and order by sales transaction date.
 
-SELECT * from product_sales WHERE model = 'Bat' ORDER BY sales_transaction_date;
+SELECT * INTO bat_sales 
+from product_sales
+WHERE model = 'Bat' 
+ORDER BY sales_transaction_date;
 
 -- 4. Count the no. of records available for above query
 
@@ -202,3 +205,81 @@ FROM bat_ltd_sales_delay;
 SELECT * FROM bat_ltd_sales_vol LIMIT 22;
 
 -- Activity 19 Analyze difference in Sales Price Hypothesis
+
+-- 1. List all the sales transaction dates for Lemon scooter for 2013
+
+SELECT 
+	sales_transaction_date 
+INTO lemon_sales
+FROM sales 
+WHERE product_id = (
+	SELECT product_id FROM products WHERE model = 'Lemon' AND year = 2013);
+	
+-- 2. Count the sales records for above table.
+
+SELECT COUNT(sales_transaction_date) FROM lemon_sales;
+
+-- 3. Latest sales transaction date
+
+SELECT MAX(sales_transaction_date) FROM lemon_sales;
+
+-- 4. Convert sales_transaction_date to Date Type
+
+ALTER TABLE lemon_sales
+ALTER COLUMN sales_transaction_date TYPE DATE;
+
+-- 5. Count the no. of sales per day
+
+SELECT
+	sales_transaction_date,
+	COUNT(sales_transaction_date)
+INTO lemon_sales_count
+FROM lemon_sales
+GROUP BY 1
+ORDER BY 1;
+
+-- 6. Calculative the commulative sum OF count
+
+SELECT 
+	*, SUM(count) OVER (ORDER BY sales_transaction_date)
+INTO lemon_sales_sum
+FROM lemon_sales_count;
+
+-- 7. Compute 7 day lag function on sum
+
+SELECT 
+	*, LAG(sum, 7) OVER (ORDER BY sales_transaction_date)
+INTO lemon_sales_delay
+FROM lemon_sales_sum;
+
+-- 8. Calculate growth rate
+
+SELECT 
+	*, (sum-lag)/lag AS volume
+INTO lemon_sales_growth
+FROM lemon_sales_delay;
+
+-- 9. Inspect first 22 records of the above table
+
+SELECT * FROM lemon_sales_growth LIMIT 22;
+
+-- Exercise 37 Analyzing sales growth by Email opening rate
+
+-- 1. Let's have a look at the email table
+
+SELECT * FROM emails LIMIT 5;
+select * from sales where product_id = 7;
+select * from bat_sales;
+-- 2. 
+
+SELECT 
+	e.email_subject,
+	e.customer_id,
+	e.opened,
+	e.sent_date,
+	e.opened_date, 
+	s.sales_transaction_date
+FROM emails e
+INNER JOIN bat_sales s
+ON e.customer_id = s.customer_id
+ORDER BY s.sales_transaction_date;
