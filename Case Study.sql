@@ -268,9 +268,8 @@ SELECT * FROM lemon_sales_growth LIMIT 22;
 -- 1. Let's have a look at the email table
 
 SELECT * FROM emails LIMIT 5;
-select * from sales where product_id = 7;
-select * from bat_sales;
--- 2. 
+
+-- 2. Extract email sent information for customers who purchased Bat scooter
 
 SELECT 
 	e.email_subject,
@@ -279,7 +278,60 @@ SELECT
 	e.sent_date,
 	e.opened_date, 
 	s.sales_transaction_date
+INTO bat_emails
 FROM emails e
 INNER JOIN bat_sales s
 ON e.customer_id = s.customer_id
 ORDER BY s.sales_transaction_date;
+
+-- 3. Inspect first 10 rows of the above table
+
+SELECT * FROM bat_emails LIMIT 10;
+
+-- 4. Extract emails which were sent to before sales_transaction_date
+
+SELECT * FROM bat_emails
+WHERE sent_date < sales_transaction_date
+ORDER BY customer_id LIMIT 22;
+
+-- 5. Delete emails which were sent 6 months prior to production
+
+DELETE FROM bat_emails
+WHERE sent_date < '2016-04-10';
+
+-- 6. Delete emails where sent date is after purchase date
+
+DELETE FROM bat_emails 
+WHERE sent_date > sales_transaction_date;
+
+-- 7. Delete emails where difference bw transaction date and sent date exceeds 30
+
+DELETE FROM bat_emails 
+WHERE (sales_transaction_date - sent_date) > '30 days'; 
+
+-- 8. EXAMINE FIRST 22 rows of above table
+
+SELECT * FROM bat_emails ORDER BY customer_id LIMIT 22;
+
+-- 9. List distict email subjects
+
+SELECT DISTINCT(email_subject) FROM bat_emails;
+
+-- 10. Delete records with Black friday in subject
+
+DELETE FROM bat_emails 
+WHERE position('Black Friday' in email_subject) > 0;
+
+-- 11. Delete all other irrelevant subject records
+
+DELETE FROM bat_emails 
+WHERE position('25% of all EV' in email_subject) > 0;
+
+DELETE FROM bat_emails 
+WHERE position('Some New EV' in email_subject) > 0;
+
+-- 12. Count the number of rows left now
+
+SELECT COUNT(sales_transaction_date) FROM bat_emails;
+
+
