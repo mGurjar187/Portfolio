@@ -334,4 +334,94 @@ WHERE position('Some New EV' in email_subject) > 0;
 
 SELECT COUNT(sales_transaction_date) FROM bat_emails;
 
+-- 13. Count the emails that were opened
+
+SELECT COUNT(opened) FROM bat_emails WHERE opened = 't';
+
+-- 14. Count the no. of customers who opened emails and made purchase
+
+SELECT COUNT(DISTINCT(customer_id)) FROM bat_emails;
+
+-- 15. Count the unique customers who made a purchase
+
+SELECT COUNT(DISTINCT(customer_id)) FROM bat_sales;
+
+-- 16. Calaculate percentage of customers who made purchase after receiving email
+
+SELECT 396.0/6659.0 AS email_rate;
+
+-- 17. Limit the scope of our analysis for three weeks only
+
+SELECT * INTO bat_emails_threewks
+FROM bat_emails 
+WHERE sales_transaction_date < '2016-11-01';
+
+-- 18 Count the emails opened during this period
+
+SELECT COUNT(opened) FROM bat_emails_threewks;
+
+-- 19. Count the emails open is true
+
+SELECT COUNT(opened) FROM bat_emails_threewks WHERE opened = 't';
+
+-- 20. Count unique customers who made purchase in first three weeks
+
+SELECT COUNT(DISTINCT(customer_id)) FROM bat_emails_threewks;
+
+-- 21. Calculate the percentage of customers who bought after opening emails
+
+SELECT 15.0/82 AS sale_rate;
+
+-- 22. Count unique customers who made purchase in first 3 weeks
+
+SELECT COUNT(DISTINCT(customer_id)) 
+FROM bat_sales 
+WHERE sales_transaction_date < '2016-11-01';
+
+-- Exercise 38 Analyze Email Marketing Campaign
+
+-- 1. Drop the lemon_sales table
+
+DROP TABLE lemon_sales;
+
+-- 2. Extracting Lemon Scooter 2013 sales info 
+
+SELECT customer_id, sales_transaction_date
+INTO lemon_sales
+FROM sales WHERE product_id = 3;
+
+-- 3. Select info from emails for customers who purchased Lemon Scooter 2013
+
+SELECT
+	e.customer_id,
+	e.email_subject,
+	e.opened,
+	e.sent_date,
+	e.opened_date,
+	ls.sales_transaction_date
+INTO lemon_emails
+FROM emails e
+INNER JOIN lemon_sales ls
+ON e.customer_id = ls.customer_id;
+
+-- 4. Fetch the production date of Lemon Scooter 2013
+
+SELECT production_start_date FROM products WHERE product_id = 3;
+
+-- 5. Delete all emails sent before production date
+
+DELETE FROM lemon_emails
+WHERE sent_date < '2013-05-01';
+
+-- 6. Remove all records where send date occured after sales
+
+DELETE FROM lemon_emails
+WHERE sent_date > sales_transaction_date;
+
+-- 7. Remove all records where sent date occured than 30 days before sales
+
+DELETE FROM lemon_emails
+WHERE (sales_transaction_date - sent_date) > '30 days';
+
+
 
