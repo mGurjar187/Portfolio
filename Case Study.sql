@@ -423,5 +423,61 @@ WHERE sent_date > sales_transaction_date;
 DELETE FROM lemon_emails
 WHERE (sales_transaction_date - sent_date) > '30 days';
 
+-- 8. Find all distinct email subjects
+
+SELECT DISTINCT email_subject FROM lemon_emails;
+
+-- 9. Delete email which are not related to Lemon Scooter
+
+DELETE FROM lemon_emails
+WHERE POSITION('25% off all EVs.' in email_subject)> 0;
+
+DELETE FROM lemon_emails
+WHERE POSITION('Like a Bat out of Heaven' in email_subject)> 0;
+
+DELETE FROM lemon_emails
+WHERE POSITION('Save the Planet' in email_subject)> 0;
+
+DELETE FROM lemon_emails
+WHERE POSITION('An Electric Car' in email_subject)> 0;
+
+DELETE FROM lemon_emails
+WHERE POSITION('We cut you a deal' in email_subject)> 0;
+
+DELETE FROM lemon_emails
+WHERE POSITION('Black Friday. Green Cars' in email_subject)> 0;
+
+DELETE FROM lemon_emails
+WHERE POSITION('Zoom' in email_subject)> 0;
+
+-- 9. Check no. of emails were opened
+
+SELECT COUNT(opened) FROM lemon_emails WHERE opened = 't';
+
+-- 10. List the customers who received emails and made purchase
+
+SELECT COUNT(DISTINCT(customer_id)) FROM lemon_emails;
+
+-- 11. Calculate percentage of customers who opened the received emails and made a purchase
+
+SELECT 128.0/506.0 AS email_rate;
+
+-- 12. Find the no. of unique customers who made a purchase
+
+SELECT COUNT(DISTINCT(customer_id)) FROM lemon_sales;
+
+-- 13. Calculate percentage of customers who made purchase having received an email
+
+SELECT 506.0/13854.0 AS email_sales;
+
+-- 14. Select all records for which sale record in first 3 weeks
+
+SELECT * INTO lemon_sales_threewks
+FROM lemon_emails
+WHERE sales_transaction_date < '2013-01-06';
+
+-- 15. Count the no. of emails sent in first three weeks
+
+SELECT COUNT(sales_transaction_date) FROM lemon_sales_threewks;
 
 
