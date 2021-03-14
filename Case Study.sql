@@ -481,3 +481,5 @@ WHERE sales_transaction_date < '2013-01-06';
 SELECT COUNT(sales_transaction_date) FROM lemon_sales_threewks;
 
 
+
+
