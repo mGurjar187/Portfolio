@@ -3,7 +3,7 @@
  *  - Download and install Postgres on your machine (see www.postgres.org)
  *  - Download data files and script
  *  - Start Postgres and create a database called SQLBook
- *  - Replace all instances of C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources with the correct path
+ *  - Replace all instances of C:\Users\DELL\Desktop\Data Analysis\Book 2 Data with the correct path
  *  - Run this script from inside Postgres
  */
  
@@ -39,8 +39,9 @@ CREATE TABLE Calendar (
 	hol_Other varchar(255) NULL
 ) ;
 
-\COPY Calendar FROM "C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\Calendar.txt"
-    WITH DELIMITER "	" CSV HEADER; 
+/* \COPY Calendar FROM 'C:\Users\DELL\Desktop\Data Analysis\Book 2 Data\Calendar.txt'
+    WITH DELIMITER '	' CSV HEADER; 
+*/
 
 CREATE TABLE Campaigns (
 	CampaignId int NOT NULL PRIMARY KEY,
@@ -51,9 +52,9 @@ CREATE TABLE Campaigns (
 ) ;
 
 
-\COPY Campaigns FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\Campaigns.txt'
-    WITH DELIMITER '	' CSV HEADER;
-
+/* \COPY Campaigns FROM 'C:\Users\DELL\Desktop\Data Analysis\Book 2 Data\Campaigns.txt'
+    WITH DELIMITER '	' NULL 'NULL' CSV HEADER;
+*/
 
 CREATE TABLE Customers (
 	CustomerId int NOT NULL PRIMARY KEY,
@@ -62,9 +63,9 @@ CREATE TABLE Customers (
 	FirstName varchar(50) NOT NULL
 ) ;
 
-\COPY Customers FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\Customers.txt'
-    WITH DELIMITER '	' CSV HEADER;
-
+/* \COPY Customers FROM 'C:\Users\DELL\Desktop\Data Analysis\Book 2 Data\Customers.txt'
+    WITH DELIMITER '	' NULL 'NULL' CSV HEADER;
+*/
 
 CREATE TABLE OrderLines (
 	OrderLineId int NOT NULL PRIMARY KEY,
@@ -78,9 +79,9 @@ CREATE TABLE OrderLines (
 ) ;
 
 
-\COPY OrderLines FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\OrderLines.txt'
-    WITH DELIMITER '	' CSV HEADER;
-
+/* \COPY OrderLines FROM 'C:\Users\DELL\Desktop\Data Analysis\Book 2 Data\OrderLines.txt'
+    WITH DELIMITER '	' NULL 'NULL' CSV HEADER;
+*/
 
 CREATE TABLE Orders (
 	OrderId int NOT NULL PRIMARY KEY,
@@ -97,9 +98,9 @@ CREATE TABLE Orders (
 ) ;
 
 
-\COPY Orders FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\Orders.txt'
-    WITH DELIMITER '	' CSV HEADER;
-
+/* \COPY Orders FROM 'C:\Users\DELL\Desktop\Data Analysis\Book 2 Data\Orders.txt'
+    WITH DELIMITER '	' NULL 'NULL' CSV HEADER;
+*/
 
 CREATE TABLE Products (
 	ProductId int NOT NULL PRIMARY KEY,
@@ -112,9 +113,9 @@ CREATE TABLE Products (
 
 
 
-\COPY Products FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\Products.txt'
-    WITH DELIMITER '	' CSV HEADER;
-
+/* \COPY Products FROM 'C:\Users\DELL\Desktop\Data Analysis\Book 2 Data\Products.txt'
+    WITH DELIMITER '	' NULL 'NULL' CSV HEADER;
+*/
 
 CREATE TABLE  Subscribers (
   SubscriberId int NOT NULL primary key,
@@ -129,9 +130,9 @@ CREATE TABLE  Subscribers (
   IsActive int default NULL
 );
 
-\COPY Subscribers FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\Subscribers.txt'
-    WITH DELIMITER '	' CSV HEADER;
-
+/* \COPY Subscribers FROM 'C:\Users\DELL\Desktop\Data Analysis\Book 2 Data\Subscribers.txt'
+    WITH DELIMITER '	' NULL 'NULL' CSV HEADER;
+*/
 
 create table ZipCensus (
     state varchar(255),
@@ -804,9 +805,9 @@ create table ZipCensus (
 
 
 
-\COPY ZipCensus FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\ZipCensus.txt'
-    WITH HEADER NULL '\N' DELIMITER '	' CSV;
-
+/* \COPY ZipCensus FROM 'C:\Users\DELL\Desktop\Data Analysis\Book 2 Data\ZipCensus.txt'
+    WITH DELIMITER '	' NULL '\N' CSV HEADER;
+*/
 
 CREATE TABLE ZipCounty (
     ZipCode char(5) NULL,
@@ -823,5 +824,6 @@ CREATE TABLE ZipCounty (
     CountyWaterAreaMiles real NULL
 );
 
-\COPY ZipCounty FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\ZipCounty.txt'
-    WITH DELIMITER '	' CSV HEADER;
+/* \COPY ZipCounty FROM 'C:\Users\DELL\Desktop\Data Analysis\Book 2 Data\ZipCounty.txt'
+    WITH DELIMITER '	' NULL 'NULL' CSV HEADER;
+*/
