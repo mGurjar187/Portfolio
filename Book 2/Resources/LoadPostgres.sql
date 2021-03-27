@@ -7,6 +7,7 @@
  *  - Run this script from inside Postgres
  */
  
+/* tested with loaddir '/Users/gordonlinoff/Desktop/gordon/DM-SQL-v2/data' */
 
 CREATE TABLE Calendar (
 	Date date NOT NULL,
@@ -38,8 +39,8 @@ CREATE TABLE Calendar (
 	hol_Other varchar(255) NULL
 ) ;
 
-\COPY Calendar FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources/Calendar.txt'
-    WITH HEADER  DELIMITER '	' CSV;
+\COPY Calendar FROM "C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\Calendar.txt"
+    WITH DELIMITER "	" CSV HEADER; 
 
 CREATE TABLE Campaigns (
 	CampaignId int NOT NULL PRIMARY KEY,
@@ -50,8 +51,8 @@ CREATE TABLE Campaigns (
 ) ;
 
 
-\COPY Campaigns FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources/Campaigns.txt'
-    WITH HEADER  DELIMITER '	' CSV;
+\COPY Campaigns FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\Campaigns.txt'
+    WITH DELIMITER '	' CSV HEADER;
 
 
 CREATE TABLE Customers (
@@ -61,8 +62,8 @@ CREATE TABLE Customers (
 	FirstName varchar(50) NOT NULL
 ) ;
 
-\COPY Customers FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources/Customers.txt'
-    WITH HEADER  DELIMITER '	' CSV;
+\COPY Customers FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\Customers.txt'
+    WITH DELIMITER '	' CSV HEADER;
 
 
 CREATE TABLE OrderLines (
@@ -77,8 +78,8 @@ CREATE TABLE OrderLines (
 ) ;
 
 
-\COPY OrderLines FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources/OrderLines.txt'
-    WITH HEADER  DELIMITER '	' CSV;
+\COPY OrderLines FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\OrderLines.txt'
+    WITH DELIMITER '	' CSV HEADER;
 
 
 CREATE TABLE Orders (
@@ -96,8 +97,8 @@ CREATE TABLE Orders (
 ) ;
 
 
-\COPY Orders FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources/Orders.txt'
-    WITH HEADER  DELIMITER '	' ENCODING 'LATIN1'  CSV;
+\COPY Orders FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\Orders.txt'
+    WITH DELIMITER '	' CSV HEADER;
 
 
 CREATE TABLE Products (
@@ -111,8 +112,8 @@ CREATE TABLE Products (
 
 
 
-\COPY Products FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources/Products.txt'
-    WITH HEADER  DELIMITER '	' CSV;
+\COPY Products FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\Products.txt'
+    WITH DELIMITER '	' CSV HEADER;
 
 
 CREATE TABLE  Subscribers (
@@ -128,8 +129,8 @@ CREATE TABLE  Subscribers (
   IsActive int default NULL
 );
 
-\COPY Subscribers FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources/Subscribers.txt'
-    WITH HEADER  DELIMITER '	' CSV;
+\COPY Subscribers FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\Subscribers.txt'
+    WITH DELIMITER '	' CSV HEADER;
 
 
 create table ZipCensus (
@@ -803,7 +804,7 @@ create table ZipCensus (
 
 
 
-\COPY ZipCensus FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources/ZipCensus.txt'
+\COPY ZipCensus FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\ZipCensus.txt'
     WITH HEADER NULL '\N' DELIMITER '	' CSV;
 
 
@@ -822,5 +823,5 @@ CREATE TABLE ZipCounty (
     CountyWaterAreaMiles real NULL
 );
 
-\COPY ZipCounty FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources/ZipCounty.txt'
-    WITH HEADER DELIMITER '	' ENCODING 'LATIN1'  CSV;
+\COPY ZipCounty FROM 'C:\Users\DELL\Desktop\Data Analysis\github\SQL-Practice\Book 2\Resources\ZipCounty.txt'
+    WITH DELIMITER '	' CSV HEADER;
